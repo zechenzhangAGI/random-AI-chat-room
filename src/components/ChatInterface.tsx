@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ScrollArea } from '@radix-ui/react-scroll-area';
 import { MessageBubble } from './MessageBubble';
 import { TypingIndicator } from './TypingIndicator';
 import { MessageInput } from './MessageInput';
@@ -57,40 +56,38 @@ export function ChatInterface({
   return (
     <div className={cn("flex flex-col h-full bg-gray-50 dark:bg-gray-900", className)}>
       {/* Messages area */}
-      <div className="flex-1 min-h-0 overflow-hidden">
-        <ScrollArea className="h-full w-full">
-          <div className="p-4 space-y-4 pb-20">
-            <AnimatePresence mode="popLayout">
-              {messages.map((message) => {
-                const messageCharacter = getCharacterForMessage(message);
-                return (
-                  <MessageBubble
-                    key={message.id}
-                    message={message}
-                    character={messageCharacter}
-                    isOwn={message.role === 'user'}
-                    showAvatar={true}
-                    showTime={true}
-                  />
-                );
-              })}
-              
-              {/* Typing indicator */}
-              {isTyping && (
-                <motion.div
-                  key="typing"
-                  layout
-                  className="flex justify-start"
-                >
-                  <TypingIndicator character={getTypingCharacter()} />
-                </motion.div>
-              )}
-            </AnimatePresence>
+      <div className="flex-1 overflow-y-auto overflow-x-hidden">
+        <div className="p-4 space-y-4 pb-20">
+          <AnimatePresence mode="popLayout">
+            {messages.map((message) => {
+              const messageCharacter = getCharacterForMessage(message);
+              return (
+                <MessageBubble
+                  key={message.id}
+                  message={message}
+                  character={messageCharacter}
+                  isOwn={message.role === 'user'}
+                  showAvatar={true}
+                  showTime={true}
+                />
+              );
+            })}
             
-            {/* Scroll anchor */}
-            <div ref={messagesEndRef} />
-          </div>
-        </ScrollArea>
+            {/* Typing indicator */}
+            {isTyping && (
+              <motion.div
+                key="typing"
+                layout
+                className="flex justify-start"
+              >
+                <TypingIndicator character={getTypingCharacter()} />
+              </motion.div>
+            )}
+          </AnimatePresence>
+          
+          {/* Scroll anchor */}
+          <div ref={messagesEndRef} />
+        </div>
       </div>
 
       {/* Input area */}
