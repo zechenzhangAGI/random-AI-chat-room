@@ -318,7 +318,7 @@ export default function GroupChatPage() {
             onSendMessage={handleSendMessage}
             groupParticipants={groupParticipants}
             isTyping={isTyping}
-            typingCharacterId={typingCharacterId}
+            typingCharacterId={typingCharacterId || undefined}
             disabled={isTyping}
           />
         </motion.div>

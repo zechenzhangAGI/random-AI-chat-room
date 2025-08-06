@@ -21,7 +21,7 @@ export async function POST(req: Request) {
     // Determine which character should respond
     let respondingCharacter;
     if (triggerCharacterId) {
-      respondingCharacter = characters.find(char => char.id === triggerCharacterId);
+      respondingCharacter = characters.find((char: any) => char.id === triggerCharacterId);
     } else {
       // Random character responds
       respondingCharacter = characters[Math.floor(Math.random() * characters.length)];
@@ -32,7 +32,7 @@ export async function POST(req: Request) {
     }
 
     // Create group context prompt
-    const groupContext = `You are ${respondingCharacter.name} in a group chat with other AI personalities. The other participants are: ${characters.filter(c => c.id !== respondingCharacter.id).map(c => `${c.name} (${c.background})`).join(', ')}.
+    const groupContext = `You are ${respondingCharacter.name} in a group chat with other AI personalities. The other participants are: ${characters.filter((c: any) => c.id !== respondingCharacter.id).map((c: any) => `${c.name} (${c.background})`).join(', ')}.
 
 ${respondingCharacter.systemPrompt}
 
@@ -80,9 +80,12 @@ export async function GET(req: Request) {
 
     // Generate conversation between AI characters
     const speaker = characters[Math.floor(Math.random() * characters.length)];
-    const others = characters.filter(c => c.id !== speaker.id);
+    if (!speaker) {
+      return Response.json({ error: 'No speaker selected' }, { status: 500 });
+    }
+    const others = characters.filter((c: any) => c.id !== speaker.id);
     
-    const conversationPrompt = `You are ${speaker.name} in a casual group chat with ${others.map(c => c.name).join(', ')}. 
+    const conversationPrompt = `You are ${speaker.name} in a casual group chat with ${others.map((c: any) => c.name).join(', ')}. 
 
 ${speaker.systemPrompt}
 
