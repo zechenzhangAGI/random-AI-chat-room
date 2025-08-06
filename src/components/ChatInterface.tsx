@@ -57,9 +57,9 @@ export function ChatInterface({
   return (
     <div className={cn("flex flex-col h-full bg-gray-50 dark:bg-gray-900", className)}>
       {/* Messages area */}
-      <div className="flex-1 overflow-hidden">
-        <ScrollArea className="h-full">
-          <div className="p-4 space-y-4">
+      <div className="flex-1 min-h-0 overflow-hidden">
+        <ScrollArea className="h-full w-full">
+          <div className="p-4 space-y-4 pb-20">
             <AnimatePresence mode="popLayout">
               {messages.map((message) => {
                 const messageCharacter = getCharacterForMessage(message);

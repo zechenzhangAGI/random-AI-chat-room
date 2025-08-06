@@ -14,9 +14,9 @@ export default function GroupChatPage() {
   const {
     groupParticipants,
     setGroupParticipants,
-    messages,
-    addMessage,
-    clearMessages,
+    groupChatMessages: messages,
+    addGroupChatMessage: addMessage,
+    clearGroupChatMessages: clearMessages,
     setCurrentRoom,
     isTyping,
     setIsTyping,

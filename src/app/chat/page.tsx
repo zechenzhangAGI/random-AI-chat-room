@@ -14,9 +14,9 @@ export default function ChatPage() {
   const {
     currentCharacter,
     setCurrentCharacter,
-    messages: storeMessages,
-    addMessage,
-    clearMessages,
+    singleChatMessages,
+    addSingleChatMessage,
+    clearSingleChatMessages,
     setCurrentRoom,
     isTyping,
     setIsTyping
@@ -34,7 +34,7 @@ export default function ChatPage() {
   }, [currentCharacter, setCurrentCharacter, setCurrentRoom]);
 
   // Filter messages for current character
-  const chatMessages = storeMessages.filter(
+  const chatMessages = singleChatMessages.filter(
     msg => msg.characterId === currentCharacter?.id || msg.role === 'user'
   );
 
@@ -42,7 +42,7 @@ export default function ChatPage() {
     if (!currentCharacter) return;
 
     // Add user message
-    addMessage({
+    addSingleChatMessage({
       content: message,
       role: 'user'
     });
@@ -74,7 +74,7 @@ export default function ChatPage() {
       const data = await response.json();
 
       if (data.content) {
-        addMessage({
+        addSingleChatMessage({
           content: data.content,
           role: 'assistant',
           characterId: currentCharacter.id
@@ -82,7 +82,7 @@ export default function ChatPage() {
       }
     } catch (error) {
       console.error('Chat error:', error);
-      addMessage({
+      addSingleChatMessage({
         content: "I'm sorry, I'm having trouble responding right now. Please try again.",
         role: 'assistant',
         characterId: currentCharacter.id
@@ -95,7 +95,7 @@ export default function ChatPage() {
   const handleSkipCharacter = () => {
     const newCharacter = getRandomCharacter([currentCharacter?.id || '']);
     setCurrentCharacter(newCharacter);
-    clearMessages();
+    clearSingleChatMessages();
   };
 
   if (!currentCharacter) {

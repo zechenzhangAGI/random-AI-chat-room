@@ -7,6 +7,7 @@ export interface Message {
   role: 'user' | 'assistant';
   characterId?: string;
   timestamp: Date;
+  roomType?: 'chat' | 'group'; // Track which room the message belongs to
 }
 
 export interface ChatState {
@@ -18,10 +19,13 @@ export interface ChatState {
   groupParticipants: Character[];
   setGroupParticipants: (characters: Character[]) => void;
   
-  // Chat history
-  messages: Message[];
-  addMessage: (message: Omit<Message, 'id' | 'timestamp'>) => void;
-  clearMessages: () => void;
+  // Separate chat histories
+  singleChatMessages: Message[];
+  groupChatMessages: Message[];
+  addSingleChatMessage: (message: Omit<Message, 'id' | 'timestamp' | 'roomType'>) => void;
+  addGroupChatMessage: (message: Omit<Message, 'id' | 'timestamp' | 'roomType'>) => void;
+  clearSingleChatMessages: () => void;
+  clearGroupChatMessages: () => void;
   
   // UI state
   isTyping: boolean;
@@ -47,17 +51,29 @@ export const useChatStore = create<ChatState>((set, get) => ({
   groupParticipants: [],
   setGroupParticipants: (characters) => set({ groupParticipants: characters }),
   
-  // Messages state
-  messages: [],
-  addMessage: (message) => {
+  // Separate message states for single and group chats
+  singleChatMessages: [],
+  groupChatMessages: [],
+  addSingleChatMessage: (message) => {
     const newMessage: Message = {
       ...message,
       id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
       timestamp: new Date(),
+      roomType: 'chat',
     };
-    set({ messages: [...get().messages, newMessage] });
+    set({ singleChatMessages: [...get().singleChatMessages, newMessage] });
   },
-  clearMessages: () => set({ messages: [] }),
+  addGroupChatMessage: (message) => {
+    const newMessage: Message = {
+      ...message,
+      id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+      timestamp: new Date(),
+      roomType: 'group',
+    };
+    set({ groupChatMessages: [...get().groupChatMessages, newMessage] });
+  },
+  clearSingleChatMessages: () => set({ singleChatMessages: [] }),
+  clearGroupChatMessages: () => set({ groupChatMessages: [] }),
   
   // UI state
   isTyping: false,
