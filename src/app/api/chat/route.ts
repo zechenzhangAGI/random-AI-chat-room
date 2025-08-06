@@ -28,7 +28,6 @@ export async function POST(req: Request) {
       model: openai('gpt-4o'),
       messages: [systemMessage, ...messages],
       temperature: 0.8,
-      maxTokens: 500,
     });
 
     // Return the streaming response directly

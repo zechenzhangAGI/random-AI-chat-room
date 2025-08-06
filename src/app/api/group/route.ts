@@ -45,7 +45,6 @@ Important: Respond naturally as ${respondingCharacter.name}. Keep responses conv
         ...messages
       ],
       temperature: 0.9,
-      maxTokens: 300,
     });
 
     return Response.json({
@@ -93,7 +92,6 @@ Generate a brief, natural message that ${speaker.name} might say to start or con
       model: openai('gpt-4o'),
       prompt: conversationPrompt,
       temperature: 0.9,
-      maxTokens: 150,
     });
 
     return Response.json({
