@@ -71,24 +71,11 @@ export default function ChatPage() {
         throw new Error('Failed to get AI response');
       }
 
-      const reader = response.body?.getReader();
-      const decoder = new TextDecoder();
-      let fullContent = '';
+      const data = await response.json();
 
-      if (reader) {
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          
-          // Decode the chunk - it's plain text from toTextStreamResponse()
-          const chunk = decoder.decode(value, { stream: true });
-          fullContent += chunk;
-        }
-      }
-
-      if (fullContent) {
+      if (data.content) {
         addMessage({
-          content: fullContent.trim(),
+          content: data.content,
           role: 'assistant',
           characterId: currentCharacter.id
         });

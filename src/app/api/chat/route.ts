@@ -1,5 +1,5 @@
 import { openai } from '@ai-sdk/openai';
-import { streamText } from 'ai';
+import { generateText } from 'ai';
 import { getCharacterById } from '@/lib/characters';
 
 export const runtime = 'edge';
@@ -24,17 +24,16 @@ export async function POST(req: Request) {
       content: character.systemPrompt
     };
 
-    const result = streamText({
+    // Use generateText for simpler implementation
+    const result = await generateText({
       model: openai('gpt-4o'),
       messages: [systemMessage, ...messages],
       temperature: 0.8,
     });
 
-    // Return the streaming response directly
-    return new Response(result.textStream, {
-      headers: {
-        'Content-Type': 'text/plain; charset=utf-8',
-      },
+    // Return the generated text as JSON
+    return Response.json({ 
+      content: result.text 
     });
   } catch (error) {
     console.error('Chat API error:', error);
